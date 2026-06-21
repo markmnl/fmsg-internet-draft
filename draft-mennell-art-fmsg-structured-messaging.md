@@ -8,19 +8,19 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+area: "Internet Engineering Steering Group"
+workgroup: "Applications and Real-Time Area"
 keyword:
  - next generation
  - unicorn
  - sparkling distributed ledger
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  group: "Applications and Real-Time Area"
+  type: "Area"
+  mail: ""
+  arch: ""
+  github: "markmnl/fmsg-internet-draft"
+  latest: "https://markmnl.github.io/fmsg-internet-draft/draft-mennell-art-fmsg-structured-messaging.html"
 
 author:
  -
