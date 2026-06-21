@@ -19,8 +19,7 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "Structured Host-to-Host Messaging with Verifiable Threads"
 category: info
 
 docname: draft-todo-yourname-protocol-latest
