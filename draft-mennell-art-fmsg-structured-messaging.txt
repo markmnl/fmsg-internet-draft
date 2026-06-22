@@ -2,34 +2,52 @@
 
 
 
-WG Working Group                                              Y. N. Here
-Internet-Draft                                    Your Organization Here
-Intended status: Informational                              21 June 2026
-Expires: 23 December 2026
+Applications and Real-Time Area                               M. Mennell
+Internet-Draft                                               Independent
+Intended status: Informational                              22 June 2026
+Expires: 24 December 2026
 
 
-       Structured Host-to-Host Messaging with Verifiable Threads
-                  draft-todo-yourname-protocol-latest
+    fmsg: Structured Host-to-Host Messaging with Verifiable Threads
+           draft-mennell-art-fmsg-structured-messaging-latest
 
 Abstract
 
-   TODO Abstract
+   fmsg defines structured binary messages and an exchange protocol
+   where messages link to a previous message using a cryptographic hash,
+   forming verifiable threads.  Messages are sent via a domain host to
+   one or more recipient hosts.  Receiving hosts verify message size,
+   recipient policies and replay status before accepting message
+   content.
+
+   A distinguishing feature of fmsg is an automatic callback challenge
+   to the sending host during message exchange, at the receiving host's
+   discretion.  Processing such a challenge requires being reachable and
+   computing additional digests over the pending message, helping
+   receivers mitigate low-effort, one-way and invalid messages before
+   accepting the full message.
+
+   This document describes the goals, principles and core architecture
+   of fmsg.  A more complete specification including full wire format,
+   protocol steps and implementation already exist at
+   https://github.com/markmnl/fmsg (https://github.com/markmnl/fmsg).
+   The purpose of this document is to describe the architecture and
+   solicit IETF venue and scope feedback before the full specification
+   is split into strandards-track deliverables.
 
 About This Document
 
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://example.com/LATEST.  Status information for this document may
-   be found at https://datatracker.ietf.org/doc/draft-todo-yourname-
-   protocol/.
+   https://markmnl.github.io/fmsg-internet-draft/draft-mennell-art-fmsg-
+   structured-messaging.html.  Status information for this document may
+   be found at https://datatracker.ietf.org/doc/draft-mennell-art-fmsg-
+   structured-messaging/.
 
-   Discussion of this document takes place on the WG Working Group
-   mailing list (mailto:WG@example.com), which is archived at
-   https://example.com/WG.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/USER/REPO.
+   https://github.com/markmnl/fmsg-internet-draft.
 
 Status of This Memo
 
@@ -46,7 +64,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 December 2026.
+   This Internet-Draft will expire on 24 December 2026.
 
 Copyright Notice
 
@@ -109,6 +127,6 @@ Acknowledgments
 
 Author's Address
 
-   Your Name Here
-   Your Organization Here
-   Email: your.email@example.com
+   Mark Mennell
+   Independent
+   Email: markmnl@fmsg.io
