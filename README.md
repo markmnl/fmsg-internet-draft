@@ -1,6 +1,6 @@
 <!-- regenerate: on (set to off if you edit this file) -->
 
-# Structured Host-to-Host Messaging with Verifiable Threads
+# fmsg – Structured Host-to-Host Messaging with Verifiable Threads
 
 This is the working area for the individual Internet-Draft, "Structured Host-to-Host Messaging with Verifiable Threads".
 
