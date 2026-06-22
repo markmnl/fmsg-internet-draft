@@ -19,22 +19,21 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "fmsg: Structured Host-to-Host Messaging with Verifiable Threads"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-mennell-art-fmsg-structured-messaging
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
 v: 3
 area: AREA
-workgroup: WG Working Group
+workgroup: WG Working Groupre
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - messaging
+ - protocol
+ - host-to-host
 venue:
   group: WG
   type: Working Group
@@ -45,9 +44,9 @@ venue:
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Mark Mennell
+    organization: Independent
+    email: markmnl@fmsg.io
 
 normative:
 
@@ -57,7 +56,11 @@ informative:
 
 --- abstract
 
-TODO Abstract
+fmsg defines structured binary messages and an exchange protocol where messages link to a previous message using a cryptographic hash, forming verifiable threads. Messages are sent via a domain host to one or more recipient hosts. Receiving hosts verify message size, recipient policies and replay status before accepting message content.
+
+A distinguishing feature of fmsg is an automatic callback challenge to the sending host during message exchange, at the receiving host's discretion. Processing such a challenge requires being reachable and computing additional digests over the pending message, helping receivers mitigate low-effort, one-way and invalid messages before accepting the full message.
+
+This document describes the goals, principles and core architecture of fmsg. A more complete specification including full wire format, protocol steps and implementation already exist at [https://github.com/markmnl/fmsg](https://github.com/markmnl/fmsg). The purpose of this document is to describe the architecture and solicit IETF venue and scope feedback before the full specification is split into strandards-track deliverables.
 
 
 --- middle
