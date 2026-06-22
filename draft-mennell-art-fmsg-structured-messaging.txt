@@ -18,22 +18,23 @@ Abstract
    forming verifiable threads.  Messages are sent via a sender's domain
    host to one or more recipient hosts.  Receiving hosts verify message
    size, recipient policy and message ancestry before accepting message
-   content.  Only participants of a message can reply to that message,
-   additional recipients can be added to a message after it has been
-   sent.
+   content.  The protocol permits only participants in a message can
+   reply to that message, and allows participants in a message to add
+   additional recipients after it has been sent.
 
-   A distinguishing feature of the fmsg protocol is a callback challenge
-   to the sending host during message exchange, at the receiving host's
-   discretion.  Processing such a challenge requires the sending host to
-   be reachable and compute additional digests over the pending message.
+   A distinguishing feature of fmsg is the receiving host can call back
+   the sending host, during message exchange, to challenge for details
+   of the message being sent.  Processing such a challenge requires the
+   sending host to be reachable and compute additional digests over the
+   pending message.
 
    This document describes the goals, principles and core architecture
    of fmsg.  A full experimental specification including wire format,
-   protocol steps and implementation is avaliable at
+   protocol steps and implementation is available at
    https://github.com/markmnl/fmsg (https://github.com/markmnl/fmsg).
    The purpose of this document is to describe the architecture and
    solicit IETF venue and scope feedback before the full specification
-   is split into applicable standards-track deliverables.
+   is split into applicable standards-track documents.
 
 About This Document
 
