@@ -13,7 +13,7 @@ workgroup: "Applications and Real-Time Area"
 keyword:
  - messaging
  - protocol
- - sparkling distributed ledger
+ - binary
 venue:
   group: "Applications and Real-Time Area"
   type: "Area"
