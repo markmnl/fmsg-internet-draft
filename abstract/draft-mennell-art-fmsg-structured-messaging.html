@@ -4,14 +4,16 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>Structured Host-to-Host Messaging with Verifiable Threads</title>
+<title>fmsg: Structured Host-to-Host Messaging with Verifiable Threads</title>
 <meta content="Mark Mennell" name="author">
 <meta content="
-       TODO Abstract 
+       fmsg defines structured binary messages and an exchange protocol where messages link to a previous message using a cryptographic hash, forming verifiable threads. Messages are sent via a domain host to one or more recipient hosts. Receiving hosts verify message size, recipient policies and replay status before accepting message content. 
+       A distinguishing feature of fmsg is an automatic callback challenge to the sending host during message exchange, at the receiving host's discretion. Processing such a challenge requires being reachable and computing additional digests over the pending message, helping receivers mitigate low-effort, one-way and invalid messages before accepting the full message. 
+       This document describes the goals, principles and core architecture of fmsg. A more complete specification including full wire format, protocol steps and implementation already exist at  https://github.com/markmnl/fmsg . The purpose of this document is to describe the architecture and solicit IETF venue and scope feedback before the full specification is split into strandards-track deliverables. 
     " name="description">
 <meta content="xml2rfc 3.34.0" name="generator">
-<meta content="next generation" name="keyword">
-<meta content="unicorn" name="keyword">
+<meta content="messaging" name="keyword">
+<meta content="protocol" name="keyword">
 <meta content="sparkling distributed ledger" name="keyword">
 <meta content="draft-mennell-art-fmsg-structured-messaging-latest" name="ietf.draft">
 <!-- Generator version information:
@@ -1045,7 +1047,7 @@ svg {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">Structured Host-to-Host Messaging with V</td>
+<td class="center">fmsg: Structured Host-to-Host Messaging </td>
 <td class="right">June 2026</td>
 </tr></thead>
 <tfoot><tr>
@@ -1073,15 +1075,17 @@ svg {
 <dd class="authors">
 <div class="author">
       <div class="author-name">M. Mennell</div>
-<div class="org">Your Organization Here</div>
+<div class="org">Independent</div>
 </div>
 </dd>
 </dl>
 </div>
-<h1 id="title">Structured Host-to-Host Messaging with Verifiable Threads</h1>
+<h1 id="title">fmsg: Structured Host-to-Host Messaging with Verifiable Threads</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">fmsg defines structured binary messages and an exchange protocol where messages link to a previous message using a cryptographic hash, forming verifiable threads. Messages are sent via a domain host to one or more recipient hosts. Receiving hosts verify message size, recipient policies and replay status before accepting message content.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">A distinguishing feature of fmsg is an automatic callback challenge to the sending host during message exchange, at the receiving host's discretion. Processing such a challenge requires being reachable and computing additional digests over the pending message, helping receivers mitigate low-effort, one-way and invalid messages before accepting the full message.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">This document describes the goals, principles and core architecture of fmsg. A more complete specification including full wire format, protocol steps and implementation already exist at <a href="https://github.com/markmnl/fmsg">https://github.com/markmnl/fmsg</a>. The purpose of this document is to describe the architecture and solicit IETF venue and scope feedback before the full specification is split into strandards-track deliverables.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1235,7 +1239,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       </h2>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Mark Mennell</span></div>
-<div dir="auto" class="left"><span class="org">Your Organization Here</span></div>
+<div dir="auto" class="left"><span class="org">Independent</span></div>
 <div class="email">
 <span>Email:</span>
 <a href="mailto:markmnl@fmsg.io" class="email">markmnl@fmsg.io</a>
