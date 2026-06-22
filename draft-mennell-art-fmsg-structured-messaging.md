@@ -36,11 +36,11 @@ informative:
 
 --- abstract
 
-fmsg defines structured binary messages and an exchange protocol where messages link to a previous message using a cryptographic hash, forming verifiable threads. Messages are sent via a domain host to one or more recipient hosts. Receiving hosts verify message size, recipient policies and replay status before accepting message content.
+fmsg defines a protocol with structured binary messages where messages can link to a previous message using a cryptographic hash, forming verifiable threads. Messages are sent via a sender's domain host to one or more recipient hosts. Receiving hosts verify message size, recipient policies and message ancestory before accepting message content. Only participants of a message can reply to that message, additional recipients can be added to a message after it has been sent.
 
-A distinguishing feature of fmsg is an automatic callback challenge to the sending host during message exchange, at the receiving host's discretion. Processing such a challenge requires being reachable and computing additional digests over the pending message, helping receivers mitigate low-effort, one-way and invalid messages before accepting the full message.
+A distinguishing feature of the fmsg protocol is a callback challenge to the sending host during message exchange, at the receiving host's discretion. Processing such a challenge requires the sending host being reachable and compute additional digests over the pending message.
 
-This document describes the goals, principles and core architecture of fmsg. A more complete specification including full wire format, protocol steps and implementation already exist at [https://github.com/markmnl/fmsg](https://github.com/markmnl/fmsg). The purpose of this document is to describe the architecture and solicit IETF venue and scope feedback before the full specification is split into strandards-track deliverables.
+This document describes the goals, principles and core architecture of fmsg. A full experimental specification including wire format, protocol steps and implementation is avaliable at [https://github.com/markmnl/fmsg](https://github.com/markmnl/fmsg). The purpose of this document is to describe the architecture and solicit IETF venue and scope feedback before the full specification is split into applicable standards-track deliverables.
 
 
 
