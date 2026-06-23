@@ -1,0 +1,167 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2026-06-23T11:44:20.655850+00:00",
+  "repo": "markmnl/fmsg-internet-draft",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOTBP1ms7o9RrJ",
+      "title": "Abstract",
+      "url": "https://github.com/markmnl/fmsg-internet-draft/pull/1",
+      "state": "MERGED",
+      "author": "markmnl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-22T00:45:29Z",
+      "updatedAt": "2026-06-22T00:53:13Z",
+      "baseRepository": "markmnl/fmsg-internet-draft",
+      "baseRefName": "main",
+      "baseRefOid": "df9b5390538102ca7ad90c08d4aedaea36696954",
+      "headRepository": "markmnl/fmsg-internet-draft",
+      "headRefName": "abstract",
+      "headRefOid": "7862a169c35943cc5d740f3772bfac153e54a236",
+      "closedAt": "2026-06-22T00:53:11Z",
+      "mergedAt": "2026-06-22T00:53:11Z",
+      "mergedBy": "markmnl",
+      "mergeCommit": {
+        "oid": "eb7b2f3a81dfb5df1e242f53aa1da928e2651a0e"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOTBP1ms7o_Mzb",
+      "title": "Update abstract for clarity on fmsg protocol",
+      "url": "https://github.com/markmnl/fmsg-internet-draft/pull/2",
+      "state": "MERGED",
+      "author": "markmnl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Revised abstract to clarify the fmsg protocol features and goals, including message verification and callback challenges.",
+      "createdAt": "2026-06-22T03:30:47Z",
+      "updatedAt": "2026-06-22T03:36:43Z",
+      "baseRepository": "markmnl/fmsg-internet-draft",
+      "baseRefName": "main",
+      "baseRefOid": "eb7b2f3a81dfb5df1e242f53aa1da928e2651a0e",
+      "headRepository": "markmnl/fmsg-internet-draft",
+      "headRefName": "abstract-01",
+      "headRefOid": "5b37c8c0e917f175605ac58e0f74d267610aa345",
+      "closedAt": "2026-06-22T03:36:41Z",
+      "mergedAt": "2026-06-22T03:36:41Z",
+      "mergedBy": "markmnl",
+      "mergeCommit": {
+        "oid": "e84b0ffce9bb88bf9a77f47b796ba5fa7b790e6c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOTBP1ms7o_y0H",
+      "title": "Refine abstract and clarify fmsg protocol description",
+      "url": "https://github.com/markmnl/fmsg-internet-draft/pull/3",
+      "state": "MERGED",
+      "author": "markmnl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-22T04:11:18Z",
+      "updatedAt": "2026-06-22T04:14:38Z",
+      "baseRepository": "markmnl/fmsg-internet-draft",
+      "baseRefName": "main",
+      "baseRefOid": "e84b0ffce9bb88bf9a77f47b796ba5fa7b790e6c",
+      "headRepository": "markmnl/fmsg-internet-draft",
+      "headRefName": "abstract-02",
+      "headRefOid": "f4814a8774aa196f51a2feaf3bfc0e704e6afc8c",
+      "closedAt": "2026-06-22T04:14:36Z",
+      "mergedAt": "2026-06-22T04:14:36Z",
+      "mergedBy": "markmnl",
+      "mergeCommit": {
+        "oid": "e653fa0b585e5e7812721e0a7b69a77e9b797242"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOTBP1ms7o_5Cf",
+      "title": "Update project title in README.md",
+      "url": "https://github.com/markmnl/fmsg-internet-draft/pull/4",
+      "state": "MERGED",
+      "author": "markmnl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-22T04:15:59Z",
+      "updatedAt": "2026-06-22T04:16:09Z",
+      "baseRepository": "markmnl/fmsg-internet-draft",
+      "baseRefName": "main",
+      "baseRefOid": "e653fa0b585e5e7812721e0a7b69a77e9b797242",
+      "headRepository": "markmnl/fmsg-internet-draft",
+      "headRefName": "readme-01",
+      "headRefOid": "261541fd6ac78f294137412b71d32fc6b45793c1",
+      "closedAt": "2026-06-22T04:16:07Z",
+      "mergedAt": "2026-06-22T04:16:07Z",
+      "mergedBy": "markmnl",
+      "mergeCommit": {
+        "oid": "fc40fa931c058e33f912fd49aeca898583e7362b"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
