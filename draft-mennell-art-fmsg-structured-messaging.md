@@ -61,7 +61,7 @@ Electronic messaging is dominated by two broad classes of systems. Internet emai
 
 This document introduces fmsg, an experimental message exchange protocol that bridges these two models, providing ownership and control at the domain level together with efficient conversational messaging. Messages are immutable binary objects exchanged between hosts responsible for the sender's and recipients' domains. Each message may reference a previous message using a cryptographic hash, forming a verifiable thread. Unlike conventional email, replies reference previous messages rather than reproducing earlier correspondence, allowing participants to verify message ancestry while transmitting only newly created message content.
 
-The architecture of fmsg is based on a simple principle: the protocol defines only messages. There are no protocol-defined channels, rooms or groups; to receive a message, someone has to send it to you. Group conversations emerge naturally as participants reply to messages and add additional recipients over time.
+The architecture of fmsg is based on a simple principle: fmsg is just messages. There are no protocol-defined channels, rooms or groups; to receive a message, someone has to send it to you. Group conversations emerge naturally as participants reply to messages and add additional recipients over time.
 
 The protocol incorporates sender verification and message integrity into the message exchange itself. Receiving hosts verify the origin, integrity and ancestry of incoming messages, and apply recipient policy, before accepting message content.
 
