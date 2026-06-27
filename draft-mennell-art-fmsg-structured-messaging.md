@@ -196,11 +196,11 @@ This document has no IANA actions.
 
 [FMSG-SPEC]
 Mennell, M., "fmsg Protocol Specification",
-https://github.com/markmnl/fmsg
+[https://github.com/markmnl/fmsg](https://github.com/markmnl/fmsgd)
 
 [FMSGD]
 Mennell, M., "fmsgd Reference Host Implementation",
-https://github.com/markmnl/fmsgd
+[https://github.com/markmnl/fmsgd](https://github.com/markmnl/fmsgd)
 
 
 --- back
