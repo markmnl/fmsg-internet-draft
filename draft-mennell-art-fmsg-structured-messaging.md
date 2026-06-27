@@ -8,8 +8,7 @@ number:
 date:
 consensus: true
 v: 3
-area: "Internet Engineering Steering Group"
-workgroup: "Applications and Real-Time Area"
+area: "ART"
 keyword:
  - messaging
  - protocol
@@ -17,8 +16,8 @@ keyword:
 venue:
   group: "Applications and Real-Time Area"
   type: "Area"
-  mail: ""
-  arch: ""
+  mail: "dispatch@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/dispatch/"
   github: "markmnl/fmsg-internet-draft"
   latest: "https://markmnl.github.io/fmsg-internet-draft/draft-mennell-art-fmsg-structured-messaging.html"
 
@@ -31,16 +30,26 @@ author:
 normative:
 
 informative:
+  FMSG-SPEC:
+    title: "fmsg Protocol Specification"
+    author:
+      - name: Mark Mennell
+    target: https://github.com/markmnl/fmsg
+  FMSGD:
+    title: "fmsgd Reference Host Implementation"
+    author:
+      - name: Mark Mennell
+    target: https://github.com/markmnl/fmsgd
 
 ...
 
 --- abstract
 
-fmsg defines a message exchange protocol with structured binary messages where messages link to a previous message using a cryptographic hash, forming verifiable threads. Messages are sent via the sender's host to one or more recipient hosts. Receiving hosts verify origin IP address, message size, recipient policy and message ancestry before accepting message content. The protocol permits only participants in a message can reply to that message, and allows participants in a message to add additional recipients after a message has been sent.
+fmsg is a message exchange protocol that combines ownership and control at the domain level, as provided by Internet email, with the efficient conversational messaging usually associated with closed messaging applications. Messages are immutable, structured binary objects exchanged directly between the hosts responsible for the sender's and recipients' domains. Each message may link to a previous message using a cryptographic hash, forming verifiable threads, so that replies convey only newly created content rather than reproducing earlier correspondence. A receiving host validates the origin, integrity and ancestry of a message, and applies recipient policy, before accepting its content. Only the participants of a message may reply to it, and participants may add additional recipients after a message has been sent.
 
-A distinguishing feature of fmsg is the receiving host can call back the sending host, during message exchange, to challenge for details of the message being sent. Processing such a challenge requires the sending host to be reachable and compute additional digests over the pending message.
+A distinguishing feature of fmsg is that the receiving host can call back the sending host during message exchange to challenge for details of the message being sent. Processing such a challenge requires the sending host to be reachable and to compute additional digests over the pending message, strengthening sender verification and message integrity.
 
-This document describes the motivation and architecture of fmsg which is based on an existing experimental protocol specification and implementation. The purpose of this document is to solicit IETF venue and scope feedback before the full specification is split into applicable standards-track documents.
+This document describes the motivation and architecture of fmsg, which is based on an existing experimental protocol specification and implementation. Its purpose is to solicit IETF feedback on venue and scope before the specification is developed into standards-track documents.
 
 
 
@@ -50,19 +59,13 @@ This document describes the motivation and architecture of fmsg which is based o
 
 Electronic messaging is dominated by two broad classes of systems. Internet email provides ownership and control at the domain level through open protocols, while modern messaging applications provide efficient conversational messaging but typically operate as closed services under a single provider.
 
-This document introduces fmsg, an experimental message exchange protocol that combines ownership and control at the domain level with efficient conversational messaging. Messages are immutable binary objects exchanged between hosts responsible for the sender's and recipients' domains. Each message may reference a previous message using a cryptographic hash, forming a verifiable thread. Unlike conventional email, replies reference previous messages rather than reproducing earlier correspondence, allowing participants to verify message ancestry while transmitting only newly created message content.
+This document introduces fmsg, an experimental message exchange protocol that bridges these two models, providing ownership and control at the domain level together with efficient conversational messaging. Messages are immutable binary objects exchanged between hosts responsible for the sender's and recipients' domains. Each message may reference a previous message using a cryptographic hash, forming a verifiable thread. Unlike conventional email, replies reference previous messages rather than reproducing earlier correspondence, allowing participants to verify message ancestry while transmitting only newly created message content.
 
-The architecture of fmsg is based on a simple principle: fmsg is just messages. There are no protocol-defined channels, rooms or groups. To receive a message, someone has to send it to you. Group conversations emerge naturally as participants reply to messages and add additional recipients over time.
+The architecture of fmsg is based on a simple principle: fmsg is just messages. There are no protocol-defined channels, rooms or groups; to receive a message, someone has to send it to you. Group conversations emerge naturally as participants reply to messages and add additional recipients over time.
 
-The protocol incorporates sender verification and message integrity into the message exchange itself. Receiving hosts verify the origin of incoming messages, message ancestry and recipient policy before accepting message content.
-
-This document describes the motivation, design goals and core architecture of fmsg. Detailed message formats, protocol procedures and transport bindings are intended to be specified separately. The purpose of this document is to introduce the architecture and solicit feedback from the IETF community regarding its applicability, scope and future standardisation.
+The protocol incorporates sender verification and message integrity into the message exchange itself. Receiving hosts verify the origin, integrity and ancestry of incoming messages, and apply recipient policy, before accepting message content.
 
 # Terminology
-
-{::boilerplate bcp14-tagged}
-
-## Terms
 
 This document uses the following terms:
 
@@ -86,7 +89,7 @@ Sender: The Address originating a message.
 
 Participants: The Sender and all Recipients of a message. Only Participants may reply to a message or add additional Recipients to a thread.
 
-# Motiviation
+# Motivation
 
 The design of fmsg was motivated by three primary objectives.
 
@@ -94,16 +97,16 @@ First, to provide the most efficient practical message exchange while preserving
 
 Second, to make conversation structure part of the protocol itself. Rather than relying on application-specific heuristics to reconstruct message threads, fmsg messages explicitly reference previous messages using cryptographic hashes. This allows participants to independently construct deterministic, verifiable message threads and enables consistent presentation of conversations across implementations.
 
-Finally, to integrate sender verification and message integrity into the message exchange protocol. Rather than relying solely on complementary protocols or deployment-specific mechanisms, fmsg incorporates these properties into the architecture of message exchange itself. Hopefully simplifying deploying and operating hosts thereby enabling decentralisation of messaging providers.
+Finally, to integrate sender verification and message integrity into the message exchange protocol. Rather than relying solely on complementary protocols or deployment-specific mechanisms, fmsg incorporates these properties into the architecture of message exchange itself. This is intended to simplify host deployment and operation, supporting a more decentralised set of messaging providers.
 
 
 # Architectural Overview
 
-The architecture of fmsg is centred on the exchange of immutable messages between hosts responsible for the sender's and recipients' domains. Each message may reference a previous message using a cryptographic hash, forming verifiable message threads. Group conversations emerge naturally as participants reply to messages and add additional recipients over time.
+This section describes the architecture of fmsg in terms of its core objects (messages, threads, participants and hosts) and the message exchange between hosts that ties them together.
 
 The architecture is guided by several core principles. Ownership and control remain at the domain level. Messages are immutable and exchanged independently between hosts. Message threads are deterministic and verifiable by all participants. Sender verification and message integrity are incorporated into the message exchange protocol. The protocol intentionally defines only the exchange of messages, leaving concerns such as user identity, authentication, message retrieval and client functionality undefined.
 
-The following subsections describe these architectural principles and how they relate to one another.
+The following subsections describe these principles and how they relate to one another.
 
 
 ## Ownership and Control
@@ -126,13 +129,13 @@ Messages are exchanged independently between Sending Hosts and Receiving Hosts. 
 
 ## Threads
 
-A Thread is formed by messages explicitly referencing previous messages. The first message in a Thread has no parent, while each subsequent message MUST reference the message to which it replies. A Thread is therefore an emergent protocol object; the protocol defines only messages and the relationships between them. As messages receive independent replies, a Thread naturally forms a directed acyclic graph (DAG).
+A Thread is formed by messages explicitly referencing previous messages. The first message in a Thread has no parent, while each subsequent message references the message to which it replies. A Thread is therefore an emergent protocol object; the protocol defines only messages and the relationships between them. As messages receive independent replies, a Thread naturally forms a directed acyclic graph (DAG).
 
 By making message relationships explicit, every Participant can deterministically reconstruct the same Thread from the same set of messages. Replies reference an earlier message, allowing only newly created message content to be transmitted while preserving the context and ordering of the conversation.
 
 The Thread model also provides a consistent basis for conversation policy. Because the Participants of a message are explicitly defined, a Receiving Host can determine whether a Sender is authorised to reply to a message and how additional Recipients become Participants in the Thread. The protocol therefore defines conversation evolution in terms of new immutable messages rather than modification of existing messages.
 
-Finally, explicit Thread structure provides conversation context that is available to every Receiving Host. A Host can determine whether its local Participants have previously participated in a Thread and MAY use this information when making implementation-specific policy decisions, such as message classification, prioritisation or spam filtering.
+Finally, explicit Thread structure provides conversation context that is available to every Receiving Host. A Host can determine whether its local Participants have previously participated in a Thread and may use this information when making implementation-specific policy decisions, such as message classification, prioritisation or spam filtering.
 
 
 ## Participants
@@ -141,15 +144,15 @@ A Participant is the Sender or a Recipient of a Message.
 
 Only a Participant of a Message can reply to that Message. This ensures that conversation participation is explicit and verifiable, and prevents unrelated parties from introducing messages into an existing Thread.
 
-A Participant MAY add additional Recipients to a Thread by creating a new Message. Existing Messages MUST NOT be modified. Instead, conversation membership evolves as new Messages are created, preserving the immutability of every Message while allowing conversations to naturally expand over time.
+A Participant may add additional Recipients to a Thread by creating a new Message. Existing Messages are never modified. Instead, conversation membership evolves as new Messages are created, preserving the immutability of every Message while allowing conversations to naturally expand over time.
 
 Because Participants are determined from the Thread itself, every Host can independently determine the Participants of any Message without requiring additional protocol state. This provides a consistent foundation for participant validation, conversation presentation and implementation-specific policy decisions.
 
 ## Hosts
 
-A Host is responsible for sending and receiving Messages on behalf of a domain. Hosts exchange Messages directly with other Hosts using the fmsg protocol, providing interoperability while preserving ownership and control at the domain level.
+A Host is an implementation of the fmsg protocol that sends and receives Messages on behalf of a domain. A domain may operate more than one Host, and a Host may serve more than one domain. Hosts are the only protocol-visible actors in fmsg: clients, user identity and message storage sit behind a Host and are not exposed by the message exchange protocol.
 
-By limiting the protocol boundary to host-to-host communication, fmsg enables independent implementations to interoperate while allowing each domain to retain complete control over its infrastructure, operational policies and internal message handling.
+A Message exchange always takes place between a Sending Host and a Receiving Host. These roles are assigned per Message: a Host acts as a Sending Host when transmitting a Message and as a Receiving Host when accepting one.
 
 ## Message Exchange
 
@@ -162,7 +165,7 @@ The message exchange protocol standardises communication between Sending Hosts a
 
 ### Message Acceptance
 
-Message acceptance is based on three complementary validation domains: Sender validation, Message validation, and Recipient validation. A Receiving Host MUST successfully complete each validation domain before accepting a Message.
+Message acceptance is based on three complementary validation stages: Sender validation, Message validation, and Recipient validation. A Receiving Host completes each validation stage before accepting a Message.
 
 Sender validation establishes that the Sending Host is authorised to exchange Messages on behalf of the Sender's domain and, where required, that it possesses the Message being transmitted. This validation provides assurance that the Message originates from an authorised Host.
 
@@ -170,15 +173,41 @@ Message validation confirms the integrity and consistency of the Message itself.
 
 Recipient validation determines whether each Recipient is willing to accept the Message. This includes validating recipient-specific policy, verifying that the Sender is permitted to communicate within the context of the Thread, and applying any implementation-specific acceptance policies. Because Recipient validation is performed independently by each Receiving Host, acceptance decisions remain under the control of the recipient's domain.
 
+### The Challenge
+
+A distinguishing feature of fmsg is the automatic challenge. While a Message is being received, and before its content is accepted, a Receiving Host may open a separate connection back to the Sending Host and challenge it for details of the Message currently being transmitted. The Sending Host responds by computing and returning cryptographic digests over the pending Message.
+
+Because the challenge is directed at the Sending Host using address information independently verified against the Sender's domain, a successful response demonstrates that the Sending Host is reachable at an authorised address and is genuinely in possession of the Message being sent. This strengthens both Sender validation and Message validation, and imposes a small cost on the sender that helps deter unsolicited bulk messaging.
+
+The challenge is optional and performed at the discretion of the Receiving Host, allowing protocol assurances to be traded against efficiency. The detailed mechanism is defined by the protocol specification rather than this document.
+
+# Scope of this Document and Request for Feedback
+
+This document deliberately describes only the motivation, design goals and core architecture of fmsg. It does not define message encodings, the on-the-wire protocol procedures, or transport bindings. Those details exist today in an experimental specification [FMSG-SPEC] and reference implementation [FMSGD], and are intended to be specified separately as the work matures.
+
+The anticipated document structure separates the work into:
+
+- this architectural overview;
+- a message format document defining the binary message structure;
+- a host-to-host protocol document defining the exchange procedures, including the challenge-response mechanism and message acceptance; and
+- one or more transport binding documents (for example, a TCP and TLS binding).
+
+The author is seeking feedback from the IETF community on the following questions, rather than a detailed review of the underlying specification at this stage:
+
+1. Is the IETF an appropriate venue for this work, and is the Applications and Real-Time (ART) area, by way of the DISPATCH working group, the right place to determine its disposition?
+2. Is there interest in standardising a domain-level messaging protocol distinct from Internet email and from proprietary instant messaging systems?
+3. Is the proposed scope appropriate, in particular the decision to standardise only host-to-host message exchange while leaving user identity, authentication, message retrieval and client behaviour out of scope?
+4. Are there existing or in-progress efforts with which this work should be aligned or reconciled?
+
 # Security Considerations
 
-The fmsg architecture is designed around validation before acceptance. A Receiving Host MUST validate a Message before accepting it into a Thread. This model ensures that sender verification, message integrity and recipient policy are evaluated before a Message becomes part of the recipient's conversation history.
+The fmsg architecture is designed around validation before acceptance. A Receiving Host validates a Message before accepting it into a Thread. This model ensures that sender verification, message integrity and recipient policy are evaluated before a Message becomes part of the recipient's conversation history.
 
-Message acceptance comprises three validation domains: Sender validation, Message validation and Recipient validation. Together these establish that the Sending Host is authorised to send on behalf of the Sender's domain, that the Message is valid and consistent with the Thread, and that the Message satisfies recipient-specific policy.
+Message acceptance comprises three validation stages: Sender validation, Message validation and Recipient validation. Together these establish that the Sending Host is authorised to send on behalf of the Sender's domain, that the Message is valid and consistent with the Thread, and that the Message satisfies recipient-specific policy.
 
-The architecture provides explicit Thread relationships and immutable Messages, allowing Receiving Hosts to independently verify Thread ancestry and determine whether a Sender is authorised to participate in a conversation. Receiving Hosts MAY additionally perform protocol-defined challenge-response verification during message exchange to strengthen sender verification and message integrity.
+The architecture provides explicit Thread relationships and immutable Messages, allowing Receiving Hosts to independently verify Thread ancestry and determine whether a Sender is authorised to participate in a conversation. Receiving Hosts may additionally perform protocol-defined challenge-response verification during message exchange to strengthen sender verification and message integrity.
 
-The protocol standardises the information available to make message acceptance decisions while intentionally leaving operational policy to Receiving Hosts. Implementations MAY apply additional measures, including spam filtering, rate limiting and abuse detection, when determining whether to accept a Message.
+The protocol standardises the information available to make message acceptance decisions while intentionally leaving operational policy to Receiving Hosts. Implementations may apply additional measures, including spam filtering, rate limiting and abuse detection, when determining whether to accept a Message.
 
 Operational security considerations, transport security, denial-of-service mitigations and other implementation guidance are outside the scope of this document and are expected to be defined by the corresponding protocol specifications.
 
@@ -186,21 +215,11 @@ Operational security considerations, transport security, denial-of-service mitig
 
 This document describes an architecture that has been implemented and evaluated through experimental software.
 
-A complete protocol specification, including message definitions and protocol procedures, has been developed [FMSG-SPEC]. A canoncial implementation following updates to the specification exists [FMSGD]. This implementation has been used to iterate development hand-in-hand with evolution of the specification.
+A complete protocol specification, including message definitions and protocol procedures, has been developed [FMSG-SPEC]. A canonical implementation following updates to the specification exists [FMSGD]. This implementation has been used to iterate development hand-in-hand with evolution of the specification.
 
 # IANA Considerations
 
 This document has no IANA actions.
-
-# References
-
-[FMSG-SPEC]
-Mennell, M., "fmsg Protocol Specification",
-[https://github.com/markmnl/fmsg](https://github.com/markmnl/fmsg)
-
-[FMSGD]
-Mennell, M., "fmsgd Reference Host Implementation",
-[https://github.com/markmnl/fmsgd](https://github.com/markmnl/fmsgd)
 
 
 --- back
@@ -208,5 +227,5 @@ Mennell, M., "fmsgd Reference Host Implementation",
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+The author thanks the early implementers and reviewers of the fmsg specification for their feedback and contributions.
 
