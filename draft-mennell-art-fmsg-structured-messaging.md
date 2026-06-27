@@ -94,7 +94,7 @@ First, to provide the most efficient practical message exchange while preserving
 
 Second, to make conversation structure part of the protocol itself. Rather than relying on application-specific heuristics to reconstruct message threads, fmsg messages explicitly reference previous messages using cryptographic hashes. This allows participants to independently construct deterministic, verifiable message threads and enables consistent presentation of conversations across implementations.
 
-Finally, to integrate sender verification and message integrity into the message exchange protocol. Rather than relying solely on complementary protocols or deployment-specific mechanisms, fmsg incorporates these properties into the architecture of message exchange itself. Hopefully simplifying deploying and operating hosts thereby enabling decentralisation of messaging providers. 
+Finally, to integrate sender verification and message integrity into the message exchange protocol. Rather than relying solely on complementary protocols or deployment-specific mechanisms, fmsg incorporates these properties into the architecture of message exchange itself. Hopefully simplifying deploying and operating hosts thereby enabling decentralisation of messaging providers.
 
 
 # Architectural Overview
@@ -132,7 +132,7 @@ By making message relationships explicit, every Participant can deterministicall
 
 The Thread model also provides a consistent basis for conversation policy. Because the Participants of a message are explicitly defined, a Receiving Host can determine whether a Sender is authorised to reply to a message and how additional Recipients become Participants in the Thread. The protocol therefore defines conversation evolution in terms of new immutable messages rather than modification of existing messages.
 
-Finally, explicit Thread structure provides conversation context that is available to every Receiving Host. A Host can determine whether its local Participants have previously participated in a Thread and MAY use this information when making implementation-specific policy decisions, such as message classification, prioritisation or spam filtering. 
+Finally, explicit Thread structure provides conversation context that is available to every Receiving Host. A Host can determine whether its local Participants have previously participated in a Thread and MAY use this information when making implementation-specific policy decisions, such as message classification, prioritisation or spam filtering.
 
 
 ## Participants
@@ -196,11 +196,11 @@ This document has no IANA actions.
 
 [FMSG-SPEC]
 Mennell, M., "fmsg Protocol Specification",
-https://github.com/markmnl/fmsg
+[https://github.com/markmnl/fmsg](https://github.com/markmnl/fmsg)
 
 [FMSGD]
 Mennell, M., "fmsgd Reference Host Implementation",
-https://github.com/markmnl/fmsgd
+[https://github.com/markmnl/fmsgd](https://github.com/markmnl/fmsgd)
 
 
 --- back
