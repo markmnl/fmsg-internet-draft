@@ -112,11 +112,10 @@ Table of Contents
    recipient belonging to a receiving host.
 
    Much of the architecture of fmsg is based on: fmsg is just messages.
-   Unlike many popular group based messaging platforms, there are no
-   protocol-defined channels, rooms or groups; to receive a message,
-   someone has to send it to you.  Group conversations emerge naturally
-   as participants reply to messages and add additional recipients over
-   time.
+   There are no protocol-defined channels, rooms or groups; to receive a
+   message, someone has to send it to you.  Group conversations emerge
+   naturally as participants reply to messages and add additional
+   recipients over time.
 
 2.  Terminology
 
@@ -156,9 +155,8 @@ Table of Contents
    First, to provide the most efficient practical message exchange while
    preserving the capabilities that have made Internet email successful.
    In particular, fmsg retains unsolicited messaging, multiple
-   recipients, arbitrary media types and ownership and control at the
-   domain level, while avoiding the repeated transmission of information
-   already known to participants in a conversation.
+   recipients, any media type and ownership and control at the domain
+   level.
 
    Second, to make conversation structure part of the protocol itself.
    Rather than relying on application-specific heuristics to reconstruct
