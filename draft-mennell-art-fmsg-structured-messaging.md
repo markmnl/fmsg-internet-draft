@@ -56,7 +56,7 @@ This document describes the motivation and architecture of fmsg, an existing pro
 
 This document introduces fmsg, an open message exchange protocol that provides ownership and control at the domain level together with efficient conversational messaging. Messages are immutable, structured binary objects with reference to a parent message they are in reply to. Threads of messages form by following their parent reference. Hosts verify sender origin, sender was a participant of parent message, message size, and recipient policy before downloading message content. During message exchange receiving hosts can actively call back the sending host to challenge for details of the message being sent. Messages can be accepted/rejected for each recipient belonging to a receiving host.
 
-Much of the architecture of fmsg is based on: fmsg is just messages. Unlike many popular group based messaging platforms, there are no protocol-defined channels, rooms or groups; to receive a message, someone has to send it to you. Group conversations emerge naturally as participants reply to messages and add additional recipients over time.
+Much of the architecture of fmsg is based on: fmsg is just messages. There are no protocol-defined channels, rooms or groups; to receive a message, someone has to send it to you. Group conversations emerge naturally as participants reply to messages and add additional recipients over time.
 
 
 # Terminology
@@ -87,7 +87,7 @@ Participants: The Sender and all Recipients of a message. Only Participants may 
 
 The design of fmsg was motivated by three primary objectives.
 
-First, to provide the most efficient practical message exchange while preserving the capabilities that have made Internet email successful. In particular, fmsg retains unsolicited messaging, multiple recipients, arbitrary media types and ownership and control at the domain level, while avoiding the repeated transmission of information already known to participants in a conversation.
+First, to provide the most efficient practical message exchange while preserving the capabilities that have made Internet email successful. In particular, fmsg retains unsolicited messaging, multiple recipients, any media type and ownership and control at the domain level.
 
 Second, to make conversation structure part of the protocol itself. Rather than relying on application-specific heuristics to reconstruct message threads, fmsg messages explicitly reference previous messages using cryptographic hashes. This allows participants to independently construct deterministic, verifiable message threads and enables 1) verify prior participants, and; 2) consistent presentation of conversations across implementations.
 
