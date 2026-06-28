@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-25T10:30:05.887786+00:00",
+  "timestamp": "2026-06-28T10:14:39.371513+00:00",
   "repo": "markmnl/fmsg-internet-draft",
   "labels": [
     {
@@ -159,6 +159,89 @@
       "mergedBy": "markmnl",
       "mergeCommit": {
         "oid": "fc40fa931c058e33f912fd49aeca898583e7362b"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOTBP1ms7rRh64",
+      "title": "draft I-D",
+      "url": "https://github.com/markmnl/fmsg-internet-draft/pull/5",
+      "state": "MERGED",
+      "author": "markmnl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-27T10:12:20Z",
+      "updatedAt": "2026-06-27T10:36:11Z",
+      "baseRepository": "markmnl/fmsg-internet-draft",
+      "baseRefName": "main",
+      "baseRefOid": "fc40fa931c058e33f912fd49aeca898583e7362b",
+      "headRepository": "markmnl/fmsg-internet-draft",
+      "headRefName": "draft",
+      "headRefOid": "43163968f9a1cc9aa02f0ea47d672e9c5a32e053",
+      "closedAt": "2026-06-27T10:36:09Z",
+      "mergedAt": "2026-06-27T10:36:09Z",
+      "mergedBy": "markmnl",
+      "mergeCommit": {
+        "oid": "7251c44a9c705b95be5334c41c8722ec2ff65ecb"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOTBP1ms8AAAABEUhm3A",
+          "commit": {
+            "abbreviatedOid": "ec6d4ee"
+          },
+          "author": "github-actions",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-27T10:12:48Z",
+          "updatedAt": "2026-06-27T10:12:49Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "````suggestion\nFinally, explicit Thread structure provides conversation context that is available to every Receiving Host. A Host can determine whether its local Participants have previously participated in a Thread and MAY use this information when making implementation-specific policy decisions, such as message classification, prioritisation or spam filtering.\n````",
+              "createdAt": "2026-06-27T10:12:49Z",
+              "updatedAt": "2026-06-27T10:12:49Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "````suggestion\nFinally, to integrate sender verification and message integrity into the message exchange protocol. Rather than relying solely on complementary protocols or deployment-specific mechanisms, fmsg incorporates these properties into the architecture of message exchange itself. Hopefully simplifying deploying and operating hosts thereby enabling decentralisation of messaging providers.\n````",
+              "createdAt": "2026-06-27T10:12:49Z",
+              "updatedAt": "2026-06-27T10:12:49Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOTBP1ms7rSIpb",
+      "title": "Review",
+      "url": "https://github.com/markmnl/fmsg-internet-draft/pull/6",
+      "state": "MERGED",
+      "author": "markmnl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-27T11:08:42Z",
+      "updatedAt": "2026-06-27T11:23:10Z",
+      "baseRepository": "markmnl/fmsg-internet-draft",
+      "baseRefName": "main",
+      "baseRefOid": "7251c44a9c705b95be5334c41c8722ec2ff65ecb",
+      "headRepository": "markmnl/fmsg-internet-draft",
+      "headRefName": "review",
+      "headRefOid": "7c750c14d4fd356f304f2a2c89ee2a54d48a6dbe",
+      "closedAt": "2026-06-27T11:23:08Z",
+      "mergedAt": "2026-06-27T11:23:08Z",
+      "mergedBy": "markmnl",
+      "mergeCommit": {
+        "oid": "b5f3dac7a46dc0ca38f5d517f251556b56653437"
       },
       "comments": [],
       "reviews": []
