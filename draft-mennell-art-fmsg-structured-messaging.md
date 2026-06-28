@@ -45,19 +45,16 @@ informative:
 
 --- abstract
 
-fmsg is a message exchange protocol that combines ownership and control at the domain level, as provided by Internet email, with the efficient conversational messaging usually associated with closed messaging applications. Messages are immutable, structured binary objects exchanged directly between the hosts responsible for the sender's and recipients' domains. Each message may link to a previous message using a cryptographic hash, forming verifiable threads, so that replies convey only newly created content rather than reproducing earlier correspondence. A receiving host validates the origin, integrity and ancestry of a message, and applies recipient policy, before accepting its content. Only the participants of a message may reply to it, and participants may add additional recipients after a message has been sent.
+fmsg is a message exchange protocol between domain hosts. Messages are immutable, structured binary objects with reference to a parent message they are in reply to. Threads of messages form by following their parent reference. Hosts verify sender origin, sender was a participant of parent message, message size, and recipient policy before downloading message content. During message exchange receiving hosts can actively call back the sending host to challenge for details of the message being sent. Messages can be accepted/rejected for each recipient belonging to a receiving host.
 
-A distinguishing feature of fmsg is that the receiving host can call back the sending host during message exchange to challenge for details of the message being sent. Processing such a challenge requires the sending host to be reachable and to compute additional digests over the pending message, strengthening sender verification and message integrity.
-
-This document describes the motivation and architecture of fmsg, which is based on an existing experimental protocol specification and implementation. Its purpose is to solicit IETF feedback on venue and scope before the specification is developed into standards-track documents.
-
+This document describes the motivation and architecture of fmsg, which is based on an existing experimental protocol specification and implementation. Its purpose is to solicit IETF feedback on venue and scope before/if the specification can develop into standards-track documents.
 
 
 --- middle
 
 # Introduction
 
-Electronic messaging is dominated by two broad classes of systems. Internet email provides ownership and control at the domain level through open protocols, while modern messaging applications provide efficient conversational messaging but typically operate as closed services under a single provider.
+Electronic messaging is dominated by open Internet email and messaging applications provides ownership and control at the domain level through open protocols, while modern messaging applications provide efficient conversational messaging but typically operate as closed services under a single provider.
 
 This document introduces fmsg, an experimental message exchange protocol that bridges these two models, providing ownership and control at the domain level together with efficient conversational messaging. Messages are immutable binary objects exchanged between hosts responsible for the sender's and recipients' domains. Each message may reference a previous message using a cryptographic hash, forming a verifiable thread. Unlike conventional email, replies reference previous messages rather than reproducing earlier correspondence, allowing participants to verify message ancestry while transmitting only newly created message content.
 
