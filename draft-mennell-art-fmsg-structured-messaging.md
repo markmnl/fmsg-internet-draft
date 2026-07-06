@@ -56,7 +56,7 @@ This document describes the motivation and architecture of fmsg, an existing pro
 
 This document introduces fmsg, an open message exchange protocol that provides ownership and control at the domain level. First the motivation for fmsg is discussed from three main points: efficiency, structured threads and built-in verifications. Then the architecture is discussed: domain defined hosts, messages, threads and the protocol steps to perform message exchange.
 
-Much of the architecture of fmsg is based on: fmsg is just messages. To receive a message, an fmsg address belonging to a domain has to send it to you. Group conversations emerge as participants reply to messages and add additional recipients over time. 
+Much of the architecture of fmsg is based on: fmsg is just messages. To receive a message, an fmsg address belonging to a domain has to send it to you. Group conversations emerge as participants reply to messages and add additional recipients over time.
 
 Scope and request for feedback is made with suggestion on future document structure splitting the message definitions, protocol and transports.
 
@@ -115,7 +115,7 @@ The core protocol defines only host-to-host message exchange. It does not define
 
 ## Messages
 
-The fundamental object in fmsg is the message. Messages are immutable, structured binary objects with a reference to a parent message they are in reply to, if any; otherwise a message without a parent reference starts a thread. 
+The fundamental object in fmsg is the message. Messages are immutable, structured binary objects with a reference to a parent message they are in reply to, if any; otherwise a message without a parent reference starts a thread.
 
 Messages are immutable. Once created, the contents of a message never change. Corrections, replies, forwarding a message to additional Recipients and other conversation activity are represented by creating new messages rather than modifying existing ones. This immutability provides a stable foundation for verification, message integrity and conversation history.
 
