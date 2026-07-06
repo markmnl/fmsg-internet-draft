@@ -7,12 +7,11 @@
 <title>fmsg: Structured Host-to-Host Messaging with Verifiable Threads</title>
 <meta content="Mark Mennell" name="author">
 <meta content="
-       fmsg is a message exchange protocol that combines ownership and control at the domain level, as provided by Internet email, with the efficient conversational messaging usually associated with closed messaging applications. Messages are immutable, structured binary objects exchanged directly between the hosts responsible for the sender's and recipients' domains. Each message may link to a previous message using a cryptographic hash, forming verifiable threads, so that replies convey only newly created content rather than reproducing earlier correspondence. A receiving host validates the origin, integrity and ancestry of a message, and applies recipient policy, before accepting its content. Only the participants of a message may reply to it, and participants may add additional recipients after a message has been sent. 
-       A distinguishing feature of fmsg is that the receiving host can call back the sending host during message exchange to challenge for details of the message being sent. Processing such a challenge requires the sending host to be reachable and to compute additional digests over the pending message, strengthening sender verification and message integrity. 
-       This document describes the motivation and architecture of fmsg, which is based on an existing experimental protocol specification and implementation. Its purpose is to solicit IETF feedback on venue and scope before the specification is developed into standards-track documents. 
+       fmsg is a message exchange protocol between domain defined hosts. Messages are binary encoded and form threads which require participation to reply to. 
+       This document describes the motivation and architecture of fmsg, an existing protocol specification and implementation are referenced, but the full specification is not included here. The purpose of this document is to solicit IETF feedback on venue and scope before/if the specification can develop into standards-track documents. 
     " name="description">
 <meta content="xml2rfc 3.34.0" name="generator">
-<meta content="messaging" name="keyword">
+<meta content="message" name="keyword">
 <meta content="protocol" name="keyword">
 <meta content="binary" name="keyword">
 <meta content="draft-mennell-art-fmsg-structured-messaging-latest" name="ietf.draft">
@@ -29,7 +28,7 @@
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.1
+    wcwidth 0.8.2
 -->
 <link href="draft-mennell-art-fmsg-structured-messaging.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1048,11 +1047,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">fmsg: Structured Host-to-Host Messaging </td>
-<td class="right">June 2026</td>
+<td class="right">July 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Mennell</td>
-<td class="center">Expires 29 December 2026</td>
+<td class="center">Expires 7 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1064,12 @@ svg {
 <dd class="internet-draft">draft-mennell-art-fmsg-structured-messaging-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-06-27" class="published">27 June 2026</time>
+<time datetime="2026-07-06" class="published">6 July 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-12-29">29 December 2026</time></dd>
+<dd class="expires"><time datetime="2027-01-07">7 January 2027</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1083,9 +1082,8 @@ svg {
 <h1 id="title">fmsg: Structured Host-to-Host Messaging with Verifiable Threads</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">fmsg is a message exchange protocol that combines ownership and control at the domain level, as provided by Internet email, with the efficient conversational messaging usually associated with closed messaging applications. Messages are immutable, structured binary objects exchanged directly between the hosts responsible for the sender's and recipients' domains. Each message may link to a previous message using a cryptographic hash, forming verifiable threads, so that replies convey only newly created content rather than reproducing earlier correspondence. A receiving host validates the origin, integrity and ancestry of a message, and applies recipient policy, before accepting its content. Only the participants of a message may reply to it, and participants may add additional recipients after a message has been sent.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">A distinguishing feature of fmsg is that the receiving host can call back the sending host during message exchange to challenge for details of the message being sent. Processing such a challenge requires the sending host to be reachable and to compute additional digests over the pending message, strengthening sender verification and message integrity.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">This document describes the motivation and architecture of fmsg, which is based on an existing experimental protocol specification and implementation. Its purpose is to solicit IETF feedback on venue and scope before the specification is developed into standards-track documents.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">fmsg is a message exchange protocol between domain defined hosts. Messages are binary encoded and form threads which require participation to reply to.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document describes the motivation and architecture of fmsg, an existing protocol specification and implementation are referenced, but the full specification is not included here. The purpose of this document is to solicit IETF feedback on venue and scope before/if the specification can develop into standards-track documents.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1122,7 +1120,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1164,7 +1162,7 @@ svg {
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-architectural-overview" class="internal xref">Architectural Overview</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-ownership-and-control" class="internal xref">Ownership and Control</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-domain-defined-hosts" class="internal xref">Domain Defined Hosts</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-messages" class="internal xref">Messages</a></p>
@@ -1176,19 +1174,16 @@ svg {
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-participants" class="internal xref">Participants</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
-                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="auto internal xref">4.5</a>.  <a href="#name-hosts" class="internal xref">Hosts</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6">
-                <p id="section-toc.1-1.4.2.6.1"><a href="#section-4.6" class="auto internal xref">4.6</a>.  <a href="#name-message-exchange" class="internal xref">Message Exchange</a></p>
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="auto internal xref">4.5</a>.  <a href="#name-message-exchange" class="internal xref">Message Exchange</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6.2.1">
-                    <p id="section-toc.1-1.4.2.6.2.1.1"><a href="#section-4.6.1" class="auto internal xref">4.6.1</a>.  <a href="#name-exchange-model" class="internal xref">Exchange Model</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5.2.1">
+                    <p id="section-toc.1-1.4.2.5.2.1.1"><a href="#section-4.5.1" class="auto internal xref">4.5.1</a>.  <a href="#name-exchange-model" class="internal xref">Exchange Model</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6.2.2">
-                    <p id="section-toc.1-1.4.2.6.2.2.1"><a href="#section-4.6.2" class="auto internal xref">4.6.2</a>.  <a href="#name-message-acceptance" class="internal xref">Message Acceptance</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5.2.2">
+                    <p id="section-toc.1-1.4.2.5.2.2.1"><a href="#section-4.5.2" class="auto internal xref">4.5.2</a>.  <a href="#name-message-acceptance" class="internal xref">Message Acceptance</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6.2.3">
-                    <p id="section-toc.1-1.4.2.6.2.3.1"><a href="#section-4.6.3" class="auto internal xref">4.6.3</a>.  <a href="#name-the-challenge" class="internal xref">The Challenge</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5.2.3">
+                    <p id="section-toc.1-1.4.2.5.2.3.1"><a href="#section-4.5.3" class="auto internal xref">4.5.3</a>.  <a href="#name-the-challenge" class="internal xref">The Challenge</a></p>
 </li>
                 </ul>
 </li>
@@ -1224,10 +1219,9 @@ svg {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Electronic messaging is dominated by two broad classes of systems. Internet email provides ownership and control at the domain level through open protocols, while modern messaging applications provide efficient conversational messaging but typically operate as closed services under a single provider.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">This document introduces fmsg, an experimental message exchange protocol that bridges these two models, providing ownership and control at the domain level together with efficient conversational messaging. Messages are immutable binary objects exchanged between hosts responsible for the sender's and recipients' domains. Each message may reference a previous message using a cryptographic hash, forming a verifiable thread. Unlike conventional email, replies reference previous messages rather than reproducing earlier correspondence, allowing participants to verify message ancestry while transmitting only newly created message content.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">The architecture of fmsg is based on a simple principle: fmsg is just messages. There are no protocol-defined channels, rooms or groups; to receive a message, someone has to send it to you. Group conversations emerge naturally as participants reply to messages and add additional recipients over time.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">The protocol incorporates sender verification and message integrity into the message exchange itself. Receiving hosts verify the origin, integrity and ancestry of incoming messages, and apply recipient policy, before accepting message content.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-1">This document introduces fmsg, an open message exchange protocol that provides ownership and control at the domain level. First the motivation for fmsg is discussed from three main points: efficiency, structured threads and built-in verifications. Then the architecture is discussed: domain defined hosts, messages, threads and the protocol steps to perform message exchange.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Much of the architecture of fmsg is based on: fmsg is just messages. To receive a message, an fmsg address belonging to a domain has to send it to you. Group conversations emerge as participants reply to messages and add additional recipients over time.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">Scope and request for feedback is made with suggestion on future document structure splitting the message definitions, protocol and transports.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
@@ -1237,15 +1231,15 @@ svg {
       </h2>
 <p id="section-2-1">This document uses the following terms:<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">Address: An fmsg address in the form @user@example.com identifying a recipient within a domain.<a href="#section-2-2" class="pilcrow">¶</a></p>
-<p id="section-2-3">Client: An application that sends and receives messages through a Host.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-3">Client: An end application that sends and receives messages belonging to a particular Address via their Host.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <p id="section-2-4">Host: An implementation of the fmsg protocol responsible for sending and receiving messages to and from other fmsg hosts.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5">Sending Host: The Host transmitting a message.<a href="#section-2-5" class="pilcrow">¶</a></p>
 <p id="section-2-6">Receiving Host: The Host receiving a message.<a href="#section-2-6" class="pilcrow">¶</a></p>
-<p id="section-2-7">Message: An immutable unit of communication exchanged between Hosts.<a href="#section-2-7" class="pilcrow">¶</a></p>
+<p id="section-2-7">Message: An immutable data structure containing all the fields, content and attachments.<a href="#section-2-7" class="pilcrow">¶</a></p>
 <p id="section-2-8">Thread: A directed acyclic graph (DAG) of messages formed by references from each message to a previous message.<a href="#section-2-8" class="pilcrow">¶</a></p>
 <p id="section-2-9">Recipient: An Address identified in a message as an intended recipient.<a href="#section-2-9" class="pilcrow">¶</a></p>
 <p id="section-2-10">Sender: The Address originating a message.<a href="#section-2-10" class="pilcrow">¶</a></p>
-<p id="section-2-11">Participants: The Sender and all Recipients of a message. Only Participants may reply to a message or add additional Recipients to a thread.<a href="#section-2-11" class="pilcrow">¶</a></p>
+<p id="section-2-11">Participants: The Sender and all Recipients of a message. Only Participants may reply to a Message or add additional Recipients to a Thread.<a href="#section-2-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="motivation">
@@ -1254,9 +1248,9 @@ svg {
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-motivation" class="section-name selfRef">Motivation</a>
       </h2>
 <p id="section-3-1">The design of fmsg was motivated by three primary objectives.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">First, to provide the most efficient practical message exchange while preserving the capabilities that have made Internet email successful. In particular, fmsg retains unsolicited messaging, multiple recipients, arbitrary media types and ownership and control at the domain level, while avoiding the repeated transmission of information already known to participants in a conversation.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">Second, to make conversation structure part of the protocol itself. Rather than relying on application-specific heuristics to reconstruct message threads, fmsg messages explicitly reference previous messages using cryptographic hashes. This allows participants to independently construct deterministic, verifiable message threads and enables consistent presentation of conversations across implementations.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">Finally, to integrate sender verification and message integrity into the message exchange protocol. Rather than relying solely on complementary protocols or deployment-specific mechanisms, fmsg incorporates these properties into the architecture of message exchange itself. This is intended to simplify host deployment and operation, supporting a more decentralised set of messaging providers.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-2">First, to provide the most efficient practical message exchange while preserving the capabilities that have made Internet email successful. In particular, fmsg retains unsolicited messaging, multiple recipients, any media type, file attachments and ownership and control at the domain level.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">Second, to make conversation structure part of the protocol itself. Rather than relying on application-specific heuristics to reconstruct message threads, fmsg messages explicitly reference previous messages using cryptographic hashes. This allows participants to independently construct deterministic, verifiable message threads and enables 1) verifying prior participants, and 2) consistent presentation of conversations across implementations.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Finally, to integrate sender verification and message integrity into the message exchange protocol. Rather than relying solely on complementary protocols or deployment-specific mechanisms, fmsg incorporates these properties into the architecture of message exchange itself. This is intended to simplify host deployment and operating hosts. The combination of sender verification and proof of prior participation (enabled by threads) helps inform implementation filtering policies.<a href="#section-3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="architectural-overview">
@@ -1267,13 +1261,14 @@ svg {
 <p id="section-4-1">This section describes the architecture of fmsg in terms of its core objects (messages, threads, participants and hosts) and the message exchange between hosts that ties them together.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">The architecture is guided by several core principles. Ownership and control remain at the domain level. Messages are immutable and exchanged independently between hosts. Message threads are deterministic and verifiable by all participants. Sender verification and message integrity are incorporated into the message exchange protocol. The protocol intentionally defines only the exchange of messages, leaving concerns such as user identity, authentication, message retrieval and client functionality undefined.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <p id="section-4-3">The following subsections describe these principles and how they relate to one another.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<div id="ownership-and-control">
+<div id="domain-defined-hosts">
 <section id="section-4.1">
-        <h3 id="name-ownership-and-control">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-ownership-and-control" class="section-name selfRef">Ownership and Control</a>
+        <h3 id="name-domain-defined-hosts">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-domain-defined-hosts" class="section-name selfRef">Domain Defined Hosts</a>
         </h3>
-<p id="section-4.1-1">fmsg preserves ownership and control at the domain level. Every address belongs to a domain, and each domain is responsible for operating one or more Hosts authorised to send and receive messages for addresses within that domain. Messages are exchanged directly between Sending Hosts and Receiving Hosts responsible for the sender's and recipients' domains.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">The core protocol defines only host-to-host message exchange. It does not define how users are authenticated, how addresses are provisioned, how messages are retrieved by clients, or how messages are stored within a domain. Thus allowing domain owners to retain control over their own infrastructure, operational policies and user management while interoperating through the fmsg message exchange protocol.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">Every fmsg address belongs to a domain, and each domain is responsible for operating one or more Hosts authorised to send and receive messages for addresses within that domain. Messages are exchanged directly between Sending Hosts and Receiving Hosts responsible for the sender's and recipients' domains.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">Hosts are looked up by the fmsg sub-domain name which also serves as a list of authorised hosts. The Receiving Host can challenge the Sending Host during transmission for the digest of the full message being sent supplying the digest of the header received so far. Recipient policy and message size are checked before downloading the message content and any attachments. Messages and their attachments can be compressed with zlib-deflate. Messages can be accepted/rejected for each recipient belonging to a Receiving Host.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">The core protocol defines only host-to-host message exchange. It does not define how users are authenticated, how addresses are provisioned, how messages are retrieved by clients, or how messages are stored within a domain. This allows domain owners to retain control over their own infrastructure, operational policies and user management while interoperating with other hosts through the fmsg message exchange protocol.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="messages">
@@ -1281,9 +1276,9 @@ svg {
         <h3 id="name-messages">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-messages" class="section-name selfRef">Messages</a>
         </h3>
-<p id="section-4.2-1">The fundamental object in fmsg is the message.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">The fundamental object in fmsg is the message. Messages are immutable, structured binary objects with a reference to a parent message they are in reply to, if any; otherwise a message without a parent reference starts a thread.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">Messages are immutable. Once created, the contents of a message never change. Corrections, replies, forwarding a message to additional Recipients and other conversation activity are represented by creating new messages rather than modifying existing ones. This immutability provides a stable foundation for verification, message integrity and conversation history.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.2-3">Each message has exactly one Sender and one or more Recipients. Messages may contain arbitrary content represented by a Media Type and may include zero or more attachments. The protocol places no restrictions on the application semantics of the message content, allowing the exchange of plain text, rich text, images, audio, video or application-specific data.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">Each message has exactly one Sender and one or more Recipients. Messages may contain arbitrary content represented by a Media Type and may include zero or more attachments each with their own Media Type. The protocol places no restrictions on the application semantics of the message content, allowing the exchange of plain text, rich text, images, audio, video or application-specific data.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
 <p id="section-4.2-4">Messages are exchanged independently between Sending Hosts and Receiving Hosts. The relationship between messages, including replies and conversation evolution, is described by the thread model rather than by the messages themselves.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1295,7 +1290,6 @@ svg {
 <p id="section-4.3-1">A Thread is formed by messages explicitly referencing previous messages. The first message in a Thread has no parent, while each subsequent message references the message to which it replies. A Thread is therefore an emergent protocol object; the protocol defines only messages and the relationships between them. As messages receive independent replies, a Thread naturally forms a directed acyclic graph (DAG).<a href="#section-4.3-1" class="pilcrow">¶</a></p>
 <p id="section-4.3-2">By making message relationships explicit, every Participant can deterministically reconstruct the same Thread from the same set of messages. Replies reference an earlier message, allowing only newly created message content to be transmitted while preserving the context and ordering of the conversation.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
 <p id="section-4.3-3">The Thread model also provides a consistent basis for conversation policy. Because the Participants of a message are explicitly defined, a Receiving Host can determine whether a Sender is authorised to reply to a message and how additional Recipients become Participants in the Thread. The protocol therefore defines conversation evolution in terms of new immutable messages rather than modification of existing messages.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
-<p id="section-4.3-4">Finally, explicit Thread structure provides conversation context that is available to every Receiving Host. A Host can determine whether its local Participants have previously participated in a Thread and may use this information when making implementation-specific policy decisions, such as message classification, prioritisation or spam filtering.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="participants">
@@ -1305,52 +1299,42 @@ svg {
         </h3>
 <p id="section-4.4-1">A Participant is the Sender or a Recipient of a Message.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <p id="section-4.4-2">Only a Participant of a Message can reply to that Message. This ensures that conversation participation is explicit and verifiable, and prevents unrelated parties from introducing messages into an existing Thread.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
-<p id="section-4.4-3">A Participant may add additional Recipients to a Thread by creating a new Message. Existing Messages are never modified. Instead, conversation membership evolves as new Messages are created, preserving the immutability of every Message while allowing conversations to naturally expand over time.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
+<p id="section-4.4-3">A Participant may add additional Recipients to a Thread by creating a copy of the message with additional fields - which original Participant is adding the Recipients and the additional Recipients being added. Existing Messages are never modified. Instead, conversation membership evolves as new Messages are created, preserving the immutability of every Message while allowing conversations to naturally expand over time.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
 <p id="section-4.4-4">Because Participants are determined from the Thread itself, every Host can independently determine the Participants of any Message without requiring additional protocol state. This provides a consistent foundation for participant validation, conversation presentation and implementation-specific policy decisions.<a href="#section-4.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="hosts">
-<section id="section-4.5">
-        <h3 id="name-hosts">
-<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-hosts" class="section-name selfRef">Hosts</a>
-        </h3>
-<p id="section-4.5-1">A Host is an implementation of the fmsg protocol that sends and receives Messages on behalf of a domain. A domain may operate more than one Host, and a Host may serve more than one domain. Hosts are the only protocol-visible actors in fmsg: clients, user identity and message storage sit behind a Host and are not exposed by the message exchange protocol.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
-<p id="section-4.5-2">A Message exchange always takes place between a Sending Host and a Receiving Host. These roles are assigned per Message: a Host acts as a Sending Host when transmitting a Message and as a Receiving Host when accepting one.<a href="#section-4.5-2" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="message-exchange">
-<section id="section-4.6">
+<section id="section-4.5">
         <h3 id="name-message-exchange">
-<a href="#section-4.6" class="section-number selfRef">4.6. </a><a href="#name-message-exchange" class="section-name selfRef">Message Exchange</a>
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-message-exchange" class="section-name selfRef">Message Exchange</a>
         </h3>
 <div id="exchange-model">
-<section id="section-4.6.1">
+<section id="section-4.5.1">
           <h4 id="name-exchange-model">
-<a href="#section-4.6.1" class="section-number selfRef">4.6.1. </a><a href="#name-exchange-model" class="section-name selfRef">Exchange Model</a>
+<a href="#section-4.5.1" class="section-number selfRef">4.5.1. </a><a href="#name-exchange-model" class="section-name selfRef">Exchange Model</a>
           </h4>
-<p id="section-4.6.1-1">Message exchange occurs directly between a Sending Host and one or more Receiving Hosts. A Sending Host is responsible for transmitting a Message to each distinct Receiving Host by domain in the Message's Recipients. Each Receiving Host processes the Message independently and determines whether it will be accepted.<a href="#section-4.6.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.6.1-2">The message exchange protocol standardises communication between Sending Hosts and Receiving Hosts. Each Receiving Host independently validates and accepts or rejects a Message per Recipient according to the requirements of the protocol and its own local policies. Acceptance or rejection by one Receiving Host has no effect on the processing of the Message by any other Receiving Host.<a href="#section-4.6.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.5.1-1">Message exchange occurs directly between a Sending Host and one or more Receiving Hosts. A Sending Host is responsible for transmitting a Message to one Receiving Host per domain in the Message's Recipients. Each Receiving Host processes the Message independently and determines whether it will be rejected outright, or rejected/accepted by individual recipients belonging to the Receiving Host's domain.<a href="#section-4.5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="message-acceptance">
-<section id="section-4.6.2">
+<section id="section-4.5.2">
           <h4 id="name-message-acceptance">
-<a href="#section-4.6.2" class="section-number selfRef">4.6.2. </a><a href="#name-message-acceptance" class="section-name selfRef">Message Acceptance</a>
+<a href="#section-4.5.2" class="section-number selfRef">4.5.2. </a><a href="#name-message-acceptance" class="section-name selfRef">Message Acceptance</a>
           </h4>
-<p id="section-4.6.2-1">Message acceptance is based on three complementary validation stages: Sender validation, Message validation, and Recipient validation. A Receiving Host completes each validation stage before accepting a Message.<a href="#section-4.6.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.6.2-2">Sender validation establishes that the Sending Host is authorised to exchange Messages on behalf of the Sender's domain and, where required, that it possesses the Message being transmitted. This validation provides assurance that the Message originates from an authorised Host.<a href="#section-4.6.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.6.2-3">Message validation confirms the integrity and consistency of the Message itself. This includes validating message structure, size constraints, replay status, and the Message's ancestry within the Thread to ensure the Message can be incorporated into a consistent and verifiable conversation history.<a href="#section-4.6.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.6.2-4">Recipient validation determines whether each Recipient is willing to accept the Message. This includes validating recipient-specific policy, verifying that the Sender is permitted to communicate within the context of the Thread, and applying any implementation-specific acceptance policies. Because Recipient validation is performed independently by each Receiving Host, acceptance decisions remain under the control of the recipient's domain.<a href="#section-4.6.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.5.2-1">Message acceptance is based on three complementary validation stages: Sender validation, Message validation, and Recipient validation. A Receiving Host completes each validation stage before accepting a Message.<a href="#section-4.5.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.5.2-2">Sender validation establishes that the Sending Host is authorised to exchange Messages on behalf of the Sender's domain and, where required, that it possesses the Message being transmitted. This validation provides assurance that the Message originates from an authorised Host.<a href="#section-4.5.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.5.2-3">Message validation confirms the integrity and consistency of the Message itself. This includes validating message structure, size constraints, replay status, and the Message's ancestry within the Thread to ensure the Message can be incorporated into a consistent and verifiable conversation history.<a href="#section-4.5.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.5.2-4">Recipient validation determines whether each Recipient is willing to accept the Message. This includes validating recipient-specific policy, verifying that the Sender is permitted to communicate within the context of the Thread, and applying any implementation-specific acceptance policies. Because Recipient validation is performed independently by each Receiving Host, acceptance decisions remain under the control of the recipient's domain.<a href="#section-4.5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="the-challenge">
-<section id="section-4.6.3">
+<section id="section-4.5.3">
           <h4 id="name-the-challenge">
-<a href="#section-4.6.3" class="section-number selfRef">4.6.3. </a><a href="#name-the-challenge" class="section-name selfRef">The Challenge</a>
+<a href="#section-4.5.3" class="section-number selfRef">4.5.3. </a><a href="#name-the-challenge" class="section-name selfRef">The Challenge</a>
           </h4>
-<p id="section-4.6.3-1">A distinguishing feature of fmsg is the automatic challenge. While a Message is being received, and before its content is accepted, a Receiving Host may open a separate connection back to the Sending Host and challenge it for details of the Message currently being transmitted. The Sending Host responds by computing and returning cryptographic digests over the pending Message.<a href="#section-4.6.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.6.3-2">Because the challenge is directed at the Sending Host using address information independently verified against the Sender's domain, a successful response demonstrates that the Sending Host is reachable at an authorised address and is genuinely in possession of the Message being sent. This strengthens both Sender validation and Message validation, and imposes a small cost on the sender that helps deter unsolicited bulk messaging.<a href="#section-4.6.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.6.3-3">The challenge is optional and performed at the discretion of the Receiving Host, allowing protocol assurances to be traded against efficiency. The detailed mechanism is defined by the protocol specification rather than this document.<a href="#section-4.6.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.5.3-1">A distinguishing feature of fmsg is the automatic challenge. While a Message is being received, and before its content is accepted, a Receiving Host may open a separate connection back to the Sending Host and challenge it for details of the Message currently being transmitted, supplying a digest of the Message header fields received thus far. The Sending Host responds by computing and returning a digest over the pending Message.<a href="#section-4.5.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.5.3-2">Because the challenge is directed at the Sending Host using address information independently verified against the Sender's domain beforehand, a successful response demonstrates that the Sending Host is reachable at an authorised address, and once the digest is verified to match that of the message, the Sending Host was genuinely in possession of the Message sent. This strengthens both Sender validation and Message validation, and imposes a small cost on the sender that helps deter unsolicited bulk messaging.<a href="#section-4.5.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.5.3-3">The challenge is optional and performed at the discretion of the Receiving Host, allowing protocol assurances to be traded against efficiency. The detailed mechanism is defined by the protocol specification rather than this document.<a href="#section-4.5.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1381,16 +1365,16 @@ svg {
 <p id="section-5-4">The author is seeking feedback from the IETF community on the following questions, rather than a detailed review of the underlying specification at this stage:<a href="#section-5-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5-5">
 <li id="section-5-5.1">
-          <p id="section-5-5.1.1">Is the IETF an appropriate venue for this work, and is the Applications and Real-Time (ART) area, by way of the DISPATCH working group, the right place to determine its disposition?<a href="#section-5-5.1.1" class="pilcrow">¶</a></p>
+          <p id="section-5-5.1.1">Is the IETF an appropriate venue for this work, and is the Applications and Real-Time (ART) area, by way of the DISPATCH working group, the right place to start?<a href="#section-5-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-5-5.2">
-          <p id="section-5-5.2.1">Is there interest in standardising a domain-level messaging protocol distinct from Internet email and from proprietary instant messaging systems?<a href="#section-5-5.2.1" class="pilcrow">¶</a></p>
+          <p id="section-5-5.2.1">Is there interest in standardising such a domain-level messaging protocol distinct from Internet email?<a href="#section-5-5.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-5-5.3">
-          <p id="section-5-5.3.1">Is the proposed scope appropriate, in particular the decision to standardise only host-to-host message exchange while leaving user identity, authentication, message retrieval and client behaviour out of scope?<a href="#section-5-5.3.1" class="pilcrow">¶</a></p>
+          <p id="section-5-5.3.1">How much do existing or in-progress works affect new protocol work like this, when would the IETF prefer alignment and reconcilement rather than a new protocol?<a href="#section-5-5.3.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-5-5.4">
-          <p id="section-5-5.4.1">Are there existing or in-progress efforts with which this work should be aligned or reconciled?<a href="#section-5-5.4.1" class="pilcrow">¶</a></p>
+          <p id="section-5-5.4.1">This document covers an application-level protocol; in addition, Media Types and DNS are used. Should each area be engaged separately?<a href="#section-5-5.4.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 </section>
@@ -1401,10 +1385,9 @@ svg {
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
 <p id="section-6-1">The fmsg architecture is designed around validation before acceptance. A Receiving Host validates a Message before accepting it into a Thread. This model ensures that sender verification, message integrity and recipient policy are evaluated before a Message becomes part of the recipient's conversation history.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">Message acceptance comprises three validation stages: Sender validation, Message validation and Recipient validation. Together these establish that the Sending Host is authorised to send on behalf of the Sender's domain, that the Message is valid and consistent with the Thread, and that the Message satisfies recipient-specific policy.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">The architecture provides explicit Thread relationships and immutable Messages, allowing Receiving Hosts to independently verify Thread ancestry and determine whether a Sender is authorised to participate in a conversation. Receiving Hosts may additionally perform protocol-defined challenge-response verification during message exchange to strengthen sender verification and message integrity.<a href="#section-6-3" class="pilcrow">¶</a></p>
-<p id="section-6-4">The protocol standardises the information available to make message acceptance decisions while intentionally leaving operational policy to Receiving Hosts. Implementations may apply additional measures, including spam filtering, rate limiting and abuse detection, when determining whether to accept a Message.<a href="#section-6-4" class="pilcrow">¶</a></p>
-<p id="section-6-5">Operational security considerations, transport security, denial-of-service mitigations and other implementation guidance are outside the scope of this document and are expected to be defined by the corresponding protocol specifications.<a href="#section-6-5" class="pilcrow">¶</a></p>
+<p id="section-6-2">The optional separate connection a Receiving Host can open to the Sending Host, the challenge, poses a threat of a denial-of-service-style attack where many, possibly spoofed, addresses trigger Receiving Hosts to open many connections to an unsuspecting host. The protocol prevents such an attack by requiring Receiving Hosts to verify that the origin IP address of an incoming Message exists among the authorised IP addresses of the purported sender's domain.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The protocol standardises the information available to make message acceptance decisions while intentionally leaving operational policy to Receiving Hosts. Implementations may apply additional measures, including spam filtering, rate limiting and abuse detection, when determining whether to accept a Message.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">Operational security considerations, transport security, denial-of-service mitigations and other implementation guidance are outside the scope of this document and are expected to be defined by the corresponding protocol specifications.<a href="#section-6-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implementation-status">
@@ -1446,7 +1429,7 @@ svg {
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">The author thanks the early implementers and reviewers of the fmsg specification for their feedback and contributions.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">The author thanks any review, feedback and implementation in advance.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
