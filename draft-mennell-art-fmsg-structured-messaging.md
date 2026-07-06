@@ -54,9 +54,9 @@ This document describes the motivation and architecture of fmsg, an existing pro
 
 # Introduction
 
-This document introduces fmsg, an open message exchange protocol that provides ownership and control at the domain level. First the motivation for fmsg is discussed from three main points: efficency, structured threads and built-in verifications. Then the architecture is discussed: domain defined hosts, messages, threads and the protocol steps to perform message exchange.
+This document introduces fmsg, an open message exchange protocol that provides ownership and control at the domain level. First the motivation for fmsg is discussed from three main points: efficiency, structured threads and built-in verifications. Then the architecture is discussed: domain defined hosts, messages, threads and the protocol steps to perform message exchange.
 
-Much of the architecture of fmsg is based on: fmsg is just messages. To receive a message, a fmsg address belonging to a domain has to send it to you. Group conversations emerge as participants reply to messages and add additional recipients over time. 
+Much of the architecture of fmsg is based on: fmsg is just messages. To receive a message, an fmsg address belonging to a domain has to send it to you. Group conversations emerge as participants reply to messages and add additional recipients over time. 
 
 Scope and request for feedback is made with suggestion on future document structure splitting the message definitions, protocol and transports.
 
@@ -90,7 +90,7 @@ The design of fmsg was motivated by three primary objectives.
 
 First, to provide the most efficient practical message exchange while preserving the capabilities that have made Internet email successful. In particular, fmsg retains unsolicited messaging, multiple recipients, any media type, file attachments and ownership and control at the domain level.
 
-Second, to make conversation structure part of the protocol itself. Rather than relying on application-specific heuristics to reconstruct message threads, fmsg messages explicitly reference previous messages using cryptographic hashes. This allows participants to independently construct deterministic, verifiable message threads and enables 1) verifying prior participants, and; 2) consistent presentation of conversations across implementations.
+Second, to make conversation structure part of the protocol itself. Rather than relying on application-specific heuristics to reconstruct message threads, fmsg messages explicitly reference previous messages using cryptographic hashes. This allows participants to independently construct deterministic, verifiable message threads and enables 1) verifying prior participants, and 2) consistent presentation of conversations across implementations.
 
 Finally, to integrate sender verification and message integrity into the message exchange protocol. Rather than relying solely on complementary protocols or deployment-specific mechanisms, fmsg incorporates these properties into the architecture of message exchange itself. This is intended to simplify host deployment and operating hosts. The combination of sender verification and proof of prior participation (enabled by threads) helps inform implementation filtering policies.
 
@@ -108,14 +108,14 @@ The following subsections describe these principles and how they relate to one a
 
 Every fmsg address belongs to a domain, and each domain is responsible for operating one or more Hosts authorised to send and receive messages for addresses within that domain. Messages are exchanged directly between Sending Hosts and Receiving Hosts responsible for the sender's and recipients' domains.
 
-Hosts are looked up by the fmsg sub-domain name which also serves as list of authorised hosts. The Receiving Host can challenge the Sending Host during transmission for the digest of the full message being sent supplying the digest of the header recieved so far. Recipient policy and message size are checked before downloading the message content and any attachments. Messages and their attachments can be compressed with zlib-deflate. Messages can be accepted/rejected for each recipient belonging to a Receiving Host.
+Hosts are looked up by the fmsg sub-domain name which also serves as a list of authorised hosts. The Receiving Host can challenge the Sending Host during transmission for the digest of the full message being sent supplying the digest of the header received so far. Recipient policy and message size are checked before downloading the message content and any attachments. Messages and their attachments can be compressed with zlib-deflate. Messages can be accepted/rejected for each recipient belonging to a Receiving Host.
 
-The core protocol defines only host-to-host message exchange. It does not define how users are authenticated, how addresses are provisioned, how messages are retrieved by clients, or how messages are stored within a domain. Thus allowing domain owners to retain control over their own infrastructure, operational policies and user management while interoperating with other hosts through the fmsg message exchange protocol.
+The core protocol defines only host-to-host message exchange. It does not define how users are authenticated, how addresses are provisioned, how messages are retrieved by clients, or how messages are stored within a domain. This allows domain owners to retain control over their own infrastructure, operational policies and user management while interoperating with other hosts through the fmsg message exchange protocol.
 
 
 ## Messages
 
-The fundamental object in fmsg is the message. Messages are immutable, structured binary objects with reference to a parent message they are in reply to, if any; otherwise a message without a parent reference starts a thread. 
+The fundamental object in fmsg is the message. Messages are immutable, structured binary objects with a reference to a parent message they are in reply to, if any; otherwise a message without a parent reference starts a thread. 
 
 Messages are immutable. Once created, the contents of a message never change. Corrections, replies, forwarding a message to additional Recipients and other conversation activity are represented by creating new messages rather than modifying existing ones. This immutability provides a stable foundation for verification, message integrity and conversation history.
 
@@ -148,7 +148,7 @@ Because Participants are determined from the Thread itself, every Host can indep
 
 ### Exchange Model
 
-Message exchange occurs directly between a Sending Host and one or more Receiving Hosts. A Sending Host is responsible for transmitting a Message to one Receiving Host per domain in the Message's Recipients. Each Receiving Host processes the Message independently and determines whether it will be rejected outright, or; rejected/accepted by individual recipients belonging to the Receiving Hosts' domain.
+Message exchange occurs directly between a Sending Host and one or more Receiving Hosts. A Sending Host is responsible for transmitting a Message to one Receiving Host per domain in the Message's Recipients. Each Receiving Host processes the Message independently and determines whether it will be rejected outright, or rejected/accepted by individual recipients belonging to the Receiving Host's domain.
 
 
 ### Message Acceptance
