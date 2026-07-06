@@ -150,7 +150,6 @@ Because Participants are determined from the Thread itself, every Host can indep
 
 Message exchange occurs directly between a Sending Host and one or more Receiving Hosts. A Sending Host is responsible for transmitting a Message to one Receiving Host per domain in the Message's Recipients. Each Receiving Host processes the Message independently and determines whether it will be rejected outright, or rejected/accepted by individual recipients belonging to the Receiving Host's domain.
 
-
 ### Message Acceptance
 
 Message acceptance is based on three complementary validation stages: Sender validation, Message validation, and Recipient validation. A Receiving Host completes each validation stage before accepting a Message.
@@ -163,11 +162,12 @@ Recipient validation determines whether each Recipient is willing to accept the 
 
 ### The Challenge
 
-A distinguishing feature of fmsg is the automatic challenge. While a Message is being received, and before its content is accepted, a Receiving Host may open a separate connection back to the Sending Host and challenge it for details of the Message currently being transmitted. The Sending Host responds by computing and returning a cryptographic digest over the pending Message.
+A distinguishing feature of fmsg is the automatic challenge. While a Message is being received, and before its content is accepted, a Receiving Host may open a separate connection back to the Sending Host and challenge it for details of the Message currently being transmitted, supplying a digest of the Message header fields received thus far. The Sending Host responds by computing and returning a digest over the pending Message.
 
-Because the challenge is directed at the Sending Host using address information independently verified against the Sender's domain, a successful response demonstrates that the Sending Host is reachable at an authorised address and is genuinely in possession of the Message being sent. This strengthens both Sender validation and Message validation, and imposes a small cost on the sender that helps deter unsolicited bulk messaging.
+Because the challenge is directed at the Sending Host using address information independently verified against the Sender's domain beforehand, a successful response demonstrates that the Sending Host is reachable at an authorised address, and once the digest is verified to match that of the message, the Sending Host was genuinely in possession of the Message sent. This strengthens both Sender validation and Message validation, and imposes a small cost on the sender that helps deter unsolicited bulk messaging.
 
 The challenge is optional and performed at the discretion of the Receiving Host, allowing protocol assurances to be traded against efficiency. The detailed mechanism is defined by the protocol specification rather than this document.
+
 
 # Scope of this Document and Request for Feedback
 
@@ -184,21 +184,27 @@ The author is seeking feedback from the IETF community on the following question
 
 1. Is the IETF an appropriate venue for this work, and is the Applications and Real-Time (ART) area, by way of the DISPATCH working group, the right place to start?
 2. Is there interest in standardising such a domain-level messaging protocol distinct from Internet email?
-3. How much do existing or in-progress works affect new protocol work like this, when would the IETF prefer alignment and reconcilement rather than a new protocol? 
+3. How much do existing or in-progress works affect new protocol work like this, when would the IETF prefer alignment and reconcilement rather than a new protocol?
+4. This document covers an application-level protocol; in addition, Media Types and DNS are used. Should each area be engaged separately?
+
 
 # Security Considerations
 
 The fmsg architecture is designed around validation before acceptance. A Receiving Host validates a Message before accepting it into a Thread. This model ensures that sender verification, message integrity and recipient policy are evaluated before a Message becomes part of the recipient's conversation history.
 
+The optional separate connection a Receiving Host can open to the Sending Host, the challenge, poses a threat of a denial-of-service-style attack where many, possibly spoofed, addresses trigger Receiving Hosts to open many connections to an unsuspecting host. The protocol prevents such an attack by requiring Receiving Hosts to verify that the origin IP address of an incoming Message exists among the authorised IP addresses of the purported sender's domain.
+
 The protocol standardises the information available to make message acceptance decisions while intentionally leaving operational policy to Receiving Hosts. Implementations may apply additional measures, including spam filtering, rate limiting and abuse detection, when determining whether to accept a Message.
 
 Operational security considerations, transport security, denial-of-service mitigations and other implementation guidance are outside the scope of this document and are expected to be defined by the corresponding protocol specifications.
+
 
 # Implementation Status
 
 This document describes an architecture that has been implemented and evaluated through experimental software.
 
 A complete protocol specification, including message definitions and protocol procedures, has been developed [FMSG-SPEC]. A canonical implementation following updates to the specification exists [FMSGD]. This implementation has been used to iterate development hand-in-hand with evolution of the specification.
+
 
 # IANA Considerations
 
