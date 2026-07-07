@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-05T09:47:58.483860+00:00",
+  "timestamp": "2026-07-07T11:22:57.000196+00:00",
   "repo": "markmnl/fmsg-internet-draft",
   "labels": [
     {
@@ -245,6 +245,61 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOTBP1ms7uXieM",
+      "title": "Shorten",
+      "url": "https://github.com/markmnl/fmsg-internet-draft/pull/7",
+      "state": "MERGED",
+      "author": "markmnl",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-07-06T13:27:56Z",
+      "updatedAt": "2026-07-06T13:30:34Z",
+      "baseRepository": "markmnl/fmsg-internet-draft",
+      "baseRefName": "main",
+      "baseRefOid": "b5f3dac7a46dc0ca38f5d517f251556b56653437",
+      "headRepository": "markmnl/fmsg-internet-draft",
+      "headRefName": "shorten",
+      "headRefOid": "2889be9f54020da8d650c8c3c57ac4bd41ce4600",
+      "closedAt": "2026-07-06T13:30:32Z",
+      "mergedAt": "2026-07-06T13:30:32Z",
+      "mergedBy": "markmnl",
+      "mergeCommit": {
+        "oid": "80c6b7bb307de08698edeaaebaf745201af53c50"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOTBP1ms8AAAABFFgwXw",
+          "commit": {
+            "abbreviatedOid": "5df25b8"
+          },
+          "author": "github-actions",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-06T13:28:19Z",
+          "updatedAt": "2026-07-06T13:28:19Z",
+          "comments": [
+            {
+              "originalPosition": 100,
+              "body": "````suggestion\nThe fundamental object in fmsg is the message. Messages are immutable, structured binary objects with a reference to a parent message they are in reply to, if any; otherwise a message without a parent reference starts a thread.\n````",
+              "createdAt": "2026-07-06T13:28:19Z",
+              "updatedAt": "2026-07-06T13:28:19Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "````suggestion\nMuch of the architecture of fmsg is based on: fmsg is just messages. To receive a message, an fmsg address belonging to a domain has to send it to you. Group conversations emerge as participants reply to messages and add additional recipients over time.\n````",
+              "createdAt": "2026-07-06T13:28:19Z",
+              "updatedAt": "2026-07-06T13:28:19Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
